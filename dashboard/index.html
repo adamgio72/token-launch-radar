@@ -2,12 +2,96 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Token Launch Radar (stub)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Launch Radar — pre-token protocols, ranked by implied launch value</title>
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<h1>Token Launch Radar</h1>
-<p id="summary">Loading…</p>
+<header class="top">
+  <div class="title">
+    <h1>Token Launch Radar</h1>
+    <p class="sub" id="subtitle">Loading the snapshot…</p>
+  </div>
+  <dl class="badges" id="badges"></dl>
+</header>
+
+<main>
+  <section class="controls" aria-label="Board controls">
+    <input id="q" type="search" placeholder="Search a protocol, slug or category…" aria-label="Search protocols" autocomplete="off">
+    <div class="chips" id="chips" role="group" aria-label="Board view">
+      <button type="button" data-view="all" class="on">All</button>
+      <button type="button" data-view="watchlist">Watchlist</button>
+      <button type="button" data-view="early">Early</button>
+      <button type="button" data-view="live">Live tokens</button>
+    </div>
+    <label class="sel">Category
+      <select id="cat" aria-label="Filter by category"><option value="">All categories</option></select>
+    </label>
+    <label class="sel">Sort
+      <select id="sort" aria-label="Sort the board">
+        <option value="implied">Implied value</option>
+        <option value="tvl">TVL</option>
+        <option value="growth">7-day growth</option>
+        <option value="age">Age</option>
+      </select>
+    </label>
+  </section>
+
+  <p class="count" id="count" aria-live="polite"></p>
+
+  <div class="tablewrap" id="boardWrap">
+    <table id="board">
+      <colgroup><col style="width:3rem"><col><col style="width:9rem"><col style="width:8rem"><col style="width:5.5rem"><col style="width:4.5rem"><col style="width:8rem"><col style="width:5rem"></colgroup>
+      <thead>
+        <tr>
+          <th class="num">#</th>
+          <th>Protocol</th>
+          <th>Category</th>
+          <th>Chains</th>
+          <th class="num">TVL</th>
+          <th class="num">7d</th>
+          <th class="num">Implied value</th>
+          <th class="num">Multiple</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <section class="live" id="liveSec" hidden>
+    <h2>Live tokens — the market's own values</h2>
+    <p class="note">These protocols already trade. Their market caps are the comparables this model is built from — they are shown here, never mixed into the ranked board.</p>
+    <div class="tablewrap">
+      <table id="liveTable">
+        <colgroup><col><col style="width:9.5rem"><col style="width:5.5rem"><col style="width:7rem"><col style="width:6rem"><col style="width:4.5rem"></colgroup>
+        <thead>
+          <tr>
+            <th>Protocol</th>
+            <th>Category</th>
+            <th class="num">TVL</th>
+            <th class="num">Market cap</th>
+            <th class="num">Mcap / TVL</th>
+            <th class="num">7d</th>
+          </tr>
+        </thead>
+        <tbody id="liveRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="method">
+    <h2>How the radar values a launch</h2>
+    <p id="methodText"></p>
+    <p class="note"><strong>Honest limits.</strong> “Records no token” means this snapshot records none — a parent protocol can hold the token and stay invisible here, so no row is ever called tokenless, only unrecorded. An implied value is a model's estimate from this snapshot: not a price, not a promise, and never a reason to farm blindly. Farm plans name a cost and a time for every step; never pay to claim.</p>
+  </section>
+</main>
+
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Protocol detail">
+  <button type="button" class="close" id="closeDrawer" aria-label="Close detail">×</button>
+  <div id="drawerBody"></div>
+</aside>
+<div class="backdrop" id="backdrop" hidden></div>
+
 <script src="../data.js"></script>
 <script src="app.js"></script>
 </body>

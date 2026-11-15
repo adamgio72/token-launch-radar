@@ -1,2 +1,189 @@
-body { font-family: system-ui, sans-serif; background: #0b0e14; color: #e6e9ef; margin: 2rem; }
-h1 { font-size: 1.5rem; }
+/* Token Launch Radar — a dark board with one amber accent for launch value. */
+:root {
+  --bg: #0d1117;
+  --surface: #161d27;
+  --surface-2: #1c2531;
+  --line: #2a3543;
+  --text: #e6e9ef;
+  --muted: #8b94a3;
+  --amber: #f0b429;
+  --amber-ink: #1a1405;
+  --teal: #2dd4bf;
+  --green: #4ade80;
+  --red: #f87171;
+  --radius: 10px;
+}
+* { box-sizing: border-box; }
+html { color-scheme: dark; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+h1 { font-size: 1.6rem; line-height: 1.2; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 1.05rem; margin: 0 0 0.5rem; }
+a { color: var(--amber); }
+button, input, select { font: inherit; color: inherit; }
+
+/* Header */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 1.4rem clamp(1rem, 4vw, 2.5rem) 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+.sub { color: var(--muted); margin: 0.35rem 0 0; max-width: 46rem; }
+.badges { display: flex; gap: 1.4rem; margin: 0; flex-wrap: wrap; }
+.badges div { text-align: right; }
+.badges dt { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.badges dd { margin: 0.1rem 0 0; font-weight: 650; font-size: 1.15rem; }
+.badges dd.amber { color: var(--amber); }
+
+main { padding: 1.1rem clamp(1rem, 4vw, 2.5rem) 2.5rem; max-width: 1200px; margin: 0 auto; }
+
+/* Controls */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+#q {
+  flex: 1 1 16rem;
+  min-width: 12rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.55rem 0.8rem;
+}
+#q:focus, select:focus, button:focus-visible { outline: 2px solid var(--amber); outline-offset: 1px; }
+.chips { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.chips button {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+}
+.chips button.on { background: var(--amber); border-color: var(--amber); color: var(--amber-ink); font-weight: 650; }
+.sel { display: flex; align-items: center; gap: 0.45rem; color: var(--muted); font-size: 0.9rem; }
+select {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.6rem;
+}
+.count { color: var(--muted); margin: 0.9rem 0 0.5rem; font-size: 0.9rem; }
+
+/* Tables */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+th, td { padding: 0.6rem 0.8rem; text-align: left; border-bottom: 1px solid var(--line); }
+thead th { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; position: sticky; top: 0; background: var(--surface); }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--surface-2); }
+tbody tr:last-child td { border-bottom: 0; }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.name { font-weight: 650; }
+.slug { color: var(--muted); font-size: 0.82rem; font-weight: 400; overflow-wrap: anywhere; }
+.tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  margin-left: 0.45rem;
+  background: var(--surface-2);
+  color: var(--amber);
+  border: 1px solid var(--line);
+}
+.tag.early { color: var(--teal); }
+.up { color: var(--green); }
+.down { color: var(--red); }
+.strong { font-weight: 700; color: var(--amber); }
+
+/* Live + method sections */
+.live, .method { margin-top: 2rem; }
+.note { color: var(--muted); font-size: 0.92rem; max-width: 60rem; }
+.method p { max-width: 60rem; }
+
+/* Drawer */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100dvh;
+  width: min(26rem, 100vw);
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+  padding: 1.2rem 1.3rem 2rem;
+  overflow-y: auto;
+  transform: translateX(105%);
+  transition: transform 0.22s ease;
+  z-index: 30;
+}
+.drawer.open { transform: translateX(0); }
+.close {
+  position: sticky;
+  top: 0;
+  float: right;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 6, 10, 0.55);
+  z-index: 20;
+}
+.drawer h2 { font-size: 1.25rem; padding-right: 2.2rem; }
+.drawer .slug { display: block; margin-top: 0.15rem; }
+.big { font-size: 1.7rem; font-weight: 750; color: var(--amber); margin: 0.4rem 0 0; font-variant-numeric: tabular-nums; }
+.big-label { color: var(--muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.9rem; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 1rem; margin: 0.6rem 0 0; font-size: 0.93rem; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.steps { list-style: none; margin: 0.6rem 0 0; padding: 0; counter-reset: step; }
+.steps li {
+  counter-increment: step;
+  padding: 0.55rem 0 0.55rem 2.1rem;
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.93rem;
+}
+.steps li:last-child { border-bottom: 0; }
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--amber);
+  color: var(--amber-ink);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: center;
+  line-height: 1.5rem;
+}
+.steps .meta { display: block; color: var(--muted); font-size: 0.82rem; margin-top: 0.15rem; }
+.drawer .note { margin-top: 1rem; }
+
+@media (max-width: 720px) {
+  .drawer { width: 100vw; border-left: 0; }
+  .badges div { text-align: left; }
+  body { font-size: 14px; }
+}

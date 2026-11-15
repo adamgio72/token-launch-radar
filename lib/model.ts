@@ -103,6 +103,8 @@ export interface BoardRow {
   gecko_id: string | null;
   symbol: string | null;
   token_status: 'pre-token';
+  /** Whether the snapshot's watchlist names this protocol. */
+  on_watchlist: boolean;
   age_days: number | null;
   implied_value_usd: number;
   model: {
@@ -323,6 +325,7 @@ export function buildBoard(snapshot: Snapshot, model: ModelConstants = MODEL): B
     gecko_id: s.p.gecko_id,
     symbol: s.p.symbol,
     token_status: 'pre-token',
+    on_watchlist: snapshot.watchlist.includes(s.p.slug),
     age_days: s.age,
     implied_value_usd: s.implied,
     model: {
